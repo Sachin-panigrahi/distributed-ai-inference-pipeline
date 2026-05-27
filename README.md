@@ -96,16 +96,16 @@ project/
 │   ├── requirements.txt
 │   └── Dockerfile
 │
-├── preprocessor/
-│   ├── pre_processor_and_client.py
+├── pre-processor_and_client/
+│   ├── main.py
 │   ├── detector_pb2.py
 │   ├── detector_pb2_grpc.py
 │   ├── requirements.txt
 │   └── Dockerfile
 │
-├── grpc-detector/
+├── detector_ai_server/
 │   ├── detector.proto
-│   ├── detector_server.py
+│   ├── main.py
 │   ├── requirements.txt
 │   └── Dockerfile
 │
