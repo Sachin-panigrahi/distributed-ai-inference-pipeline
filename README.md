@@ -352,5 +352,4 @@ This project was built to explore:
 
 It is designed as a learning-focused production-style system rather than a simple demo application.
 
-```
 
