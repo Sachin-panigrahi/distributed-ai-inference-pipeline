@@ -1,4 +1,4 @@
-````md
+
 # Distributed AI Inference Pipeline
 
 An event-driven AI image processing pipeline built using FastAPI, Kafka, gRPC, Docker, Kubernetes, MySQL, MongoDB, and AWS S3.
