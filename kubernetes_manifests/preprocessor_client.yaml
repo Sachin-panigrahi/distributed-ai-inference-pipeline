@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: preprocessor-client
+  namespace: ai-pipeline
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: preprocessor-client
+
+  template:
+    metadata:
+      labels:
+        app: preprocessor-client
+
+    spec:
+      containers:
+        - name: preprocessor-client
+          image: YOUR_DOCKERHUB/preprocessor-client:latest
+
+          env:
+            - name: BOOTSTRAP_SERVER
+              value: my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
+
+            - name: CONSUMING_TOPIC
+              value: image_upload
+
+            - name: PRODUCING_TOPIC
+              value: classification_result
+
+            - name: S3_BUCKET
+              value: my-imageclass
+
+            - name: S3_FOLDER
+              value: datasets
+
+            - name: AWS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: access-key
+
+            - name: AWS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secret
+                  key: secret-key
+
+            - name: AWS_REGION
+              value: us-east-1
+
+            - name: GRPC_SERVER
+              value: grpc-detector-service:50051
+
+          resources:
+            requests:
+              cpu: 300m
+              memory: 512Mi
+
+            limits:
+              cpu: 1
+              memory: 1Gi
+
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - pgrep -f pre_processor_and_client.py
+
+            initialDelaySeconds: 15
+            periodSeconds: 30

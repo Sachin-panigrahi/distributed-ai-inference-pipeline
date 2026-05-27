@@ -1,0 +1,5 @@
+kafka-python
+boto3
+grpcio
+grpcio-tools
+protobuf

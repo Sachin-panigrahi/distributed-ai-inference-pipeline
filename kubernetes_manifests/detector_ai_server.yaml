@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-detector
+  namespace: ai-pipeline
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: grpc-detector
+
+  template:
+    metadata:
+      labels:
+        app: grpc-detector
+
+    spec:
+      containers:
+        - name: grpc-detector
+          image: YOUR_DOCKERHUB/grpc-detector:latest
+
+          ports:
+            - containerPort: 50051
+
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+
+            limits:
+              cpu: 2
+              memory: 2Gi

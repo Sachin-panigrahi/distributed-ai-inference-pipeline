@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-consumer
+  namespace: ai-pipeline
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: mongodb-consumer
+
+  template:
+    metadata:
+      labels:
+        app: mongodb-consumer
+
+    spec:
+      containers:
+        - name: mongodb-consumer
+          image: YOUR_DOCKERHUB/mongodb-consumer:latest
+
+          env:
+            - name: BOOTSTRAP_SERVER
+              value: my-cluster-kafka-bootstrap.kafka.svc.cluster.local:9092
+
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: mongo-uri
+
+            - name: MYSQL_HOST
+              value: mysql-service
+
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: username
+
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
+
+            - name: MYSQL_DATABASE
+              value: image_db
+
+            - name: MYSQL_TABLE
+              value: image_audit
+
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - pgrep -f mongodump.py
+
+            initialDelaySeconds: 15
+            periodSeconds: 30
